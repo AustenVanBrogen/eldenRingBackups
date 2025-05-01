@@ -1,1 +1,0 @@
-const eldenRingPath = "somePath/somePlace"
