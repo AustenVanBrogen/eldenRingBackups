@@ -1,10 +1,19 @@
 import json
 import shutil
 import os
+import time
+import sys
+import signal
+from checkProcess import testExport
+from checkProcess import checkProcessStatus
+import psutil
 
 eldenRingPath = None
 eldenRingBackupPath = None
-
+secondsInTenMinutes = 600
+programEnded = False
+processName = "eldenring.exe"
+gameIsRunning = False
 
 def getBaseDir(path):
     endpoint = path.rfind("\\")
@@ -23,14 +32,23 @@ def copyFile(sourcePath, destinationPath):
     shutil.copytree(sourcePath, destinationPath)
 
 def main():
-    with open('fileLocations.json') as fileLocations:
-        fileData = json.load(fileLocations)
-        eldenRingPath = fileData["eldenRingSaveLocation"]
-        eldenRingBackupPath = fileData["eldenRingBackupLocation"]
-        fileLocations.close()
+    while not programEnded: 
 
-    copyFile(eldenRingPath, eldenRingBackupPath)
+        gameIsRunning = checkProcessStatus(processName)
+
+        if gameIsRunning:  
+            with open('fileLocations.json') as fileLocations:
+                fileData = json.load(fileLocations)
+                eldenRingPath = fileData["eldenRingSaveLocation"]
+                eldenRingBackupPath = fileData["eldenRingBackupLocation"]
+                fileLocations.close()
+
+            copyFile(eldenRingPath, eldenRingBackupPath)
+            time.sleep(secondsInTenMinutes)
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Program ended")
 
