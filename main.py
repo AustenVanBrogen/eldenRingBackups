@@ -4,7 +4,6 @@ import os
 import time
 import sys
 import signal
-from checkProcess import testExport
 from checkProcess import checkProcessStatus
 import psutil
 
