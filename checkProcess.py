@@ -1,8 +1,5 @@
 import wmi
 
-def testExport():
-    print("Sup bitch?!?")
-
 def checkProcessStatus(processName):
     gameIsRunning = False
     
